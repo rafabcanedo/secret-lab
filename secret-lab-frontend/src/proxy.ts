@@ -16,7 +16,7 @@ export function proxy(request: NextRequest) {
   )
 
   if (isProtected && !token) {
-    return NextResponse.redirect(new URL("/login", request.url))
+    return NextResponse.redirect(new URL("/signin", request.url))
   }
 
   return NextResponse.next()
