@@ -39,7 +39,7 @@ export default async function Navbar() {
               <UserMenu initials="SL" />
             </>
           ) : (
-            <Button size="sm">
+            <Button size="lg">
               Sign In
             </Button>
           )}

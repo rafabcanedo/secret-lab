@@ -5,7 +5,7 @@ import logo from "@/assets/logo-secret-lab.png"
 export default function Footer() {
   return (
     <footer className="border-t bg-white">
-      <div className="mx-auto flex max-w-6xl flex-col items-center gap-3 px-6 py-8 text-center">
+      <div className="mx-auto flex max-w-6xl flex-col items-center gap-2 px-6 py-4 text-center">
         <div className="flex items-center gap-2">
           <Image src={logo} alt="Secret Lab" height={28} />
           <span className="font-semibold">Secret Lab</span>
