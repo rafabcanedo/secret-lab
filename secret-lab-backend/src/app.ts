@@ -7,6 +7,8 @@ import { env } from "./config/env.js";
 import { AppError } from "./shared/errors/AppError.js";
 import { healthRoutes } from "./routes/health.js";
 import { userRoutes } from "./routes/users.js";
+import { communityRoutes } from "./routes/communities.js";
+import { postRoutes } from "./routes/posts.js";
 
 export const app = Fastify({ logger: true });
 
@@ -33,3 +35,5 @@ app.setErrorHandler<Error>((error, _request, reply) => {
 
 app.register(healthRoutes);
 app.register(userRoutes);
+app.register(communityRoutes);
+app.register(postRoutes);
