@@ -2,9 +2,11 @@ import Fastify from "fastify";
 import cors from "@fastify/cors";
 import cookie from "@fastify/cookie";
 import jwt from "@fastify/jwt";
+import { ValidationError } from "yup";
 import { env } from "./config/env.js";
 import { AppError } from "./shared/errors/AppError.js";
-import { healthRoutes } from "./modules/health/routes.js";
+import { healthRoutes } from "./routes/health.js";
+import { userRoutes } from "./routes/users.js";
 
 export const app = Fastify({ logger: true });
 
@@ -22,8 +24,12 @@ app.setErrorHandler<Error>((error, _request, reply) => {
   if (error instanceof AppError) {
     return reply.status(error.statusCode).send({ message: error.message });
   }
+  if (error instanceof ValidationError) {
+    return reply.status(400).send({ message: "Validation error", errors: error.errors });
+  }
   app.log.error(error);
   return reply.status(500).send({ message: "Internal server error" });
 });
 
 app.register(healthRoutes);
+app.register(userRoutes);
