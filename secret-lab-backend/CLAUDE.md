@@ -27,7 +27,7 @@ Este agent atua **exclusivamente** dentro de `secret-lab-backend`. Não modifica
 ## Princípios Gerais
 
 - Separar transporte HTTP, validação, regras de negócio e acesso a dados.
-- Organizar o código por domínio, aplicando colocation.
+- Organizar o código por camada — cada camada é uma pasta, cada domínio é um arquivo dentro dela.
 - Preferir funções pequenas e responsabilidades bem definidas.
 - Evitar abstrações, interfaces e camadas sem necessidade real.
 - Não criar arquivos ou pastas vazios apenas para seguir uma estrutura.
@@ -99,17 +99,18 @@ src/
 ├── db/
 │   ├── index.ts
 │   └── schema/
-│       └── index.ts
-├── modules/
-│   └── [domain]/
-│       ├── routes.ts
-│       ├── controller.ts
-│       ├── service.ts
-│       ├── repository.ts
-│       ├── validations.ts
-│       ├── types.ts
-│       ├── constants.ts
-│       └── tests/
+├── routes/
+│   └── [domain].ts
+├── controllers/
+│   └── [domain].ts
+├── services/
+│   └── [domain].ts
+├── repositories/
+│   └── [domain].ts
+├── validations/
+│   └── [domain].ts
+├── types/
+│   └── [domain].ts
 └── shared/
     ├── errors/
     ├── middlewares/
@@ -118,23 +119,9 @@ src/
 
 - `app.ts`: configura a aplicação sem iniciar o listener HTTP.
 - `server.ts`: inicializa dependências, inicia o servidor e configura o encerramento gracioso.
-- Criar somente os arquivos necessários para cada módulo — não criar esqueletos vazios.
-
----
-
-## Colocation
-
-- Manter tipos, constantes, validações, helpers e testes próximos ao domínio que os utiliza.
-- Mover código para `shared/` apenas quando houver reutilização real entre módulos.
-- Um módulo não deve acessar detalhes internos de outro módulo.
-- Interações entre módulos ocorrem por pontos de entrada explícitos (services públicas).
-
-### Organização de arquivos auxiliares
-
-- `constants.ts`: dados estáticos, mapas e configurações locais.
-- `types.ts`: declarações de tipos e interfaces do domínio.
-- `validations.ts`: schemas Yup do domínio.
-- Transformar esses arquivos em pastas com `index.ts` somente quando o volume justificar.
+- Cada camada é uma pasta. Cada domínio é um arquivo dentro da camada correspondente.
+- Criar somente os arquivos necessários — não criar esqueletos vazios.
+- Código compartilhado entre domínios vai em `shared/`.
 
 ---
 
