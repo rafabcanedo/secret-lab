@@ -13,12 +13,12 @@ export const communities = pgTable("communities", {
 });
 
 export const communityMembers = pgTable("community_members", {
-  community_id: uuid().notNull().references(() => communities.id),
+  community_id: uuid().notNull().references(() => communities.id, { onDelete: "cascade" }),
   user_id:      uuid().notNull().references(() => users.id),
   created_at:   timestamp({ withTimezone: true }).notNull().defaultNow(),
 }, (t) => [primaryKey({ columns: [t.community_id, t.user_id] })]);
 
 export const communityCategories = pgTable("community_categories", {
-  community_id: uuid().notNull().references(() => communities.id),
+  community_id: uuid().notNull().references(() => communities.id, { onDelete: "cascade" }),
   category_id:  uuid().notNull().references(() => categories.id),
 }, (t) => [primaryKey({ columns: [t.community_id, t.category_id] })]);

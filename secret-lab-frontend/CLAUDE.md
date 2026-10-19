@@ -50,7 +50,7 @@ Page/Component
 
 **Validação:** schemas em `src/validations/schemas.ts` com Yup; validadores de campo reutilizáveis em `src/validations/fields.ts`.
 
-**Types** centralizados em `src/types/index.ts`; inclui enums de domínio como `Category` e `Specialities`.
+**Types** centralizados em `src/types/index.ts`. **Enums** centralizados em `src/enums/index.ts`.
 
 **React Query** configurado em `src/lib/react-query/index.tsx`.
 

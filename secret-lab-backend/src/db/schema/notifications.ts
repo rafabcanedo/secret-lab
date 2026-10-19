@@ -10,8 +10,8 @@ export const notifications = pgTable("notifications", {
   user_id:    uuid().notNull().references(() => users.id),
   actor_id:   uuid().notNull().references(() => users.id),
   type:       notificationTypeEnum().notNull(),
-  post_id:    uuid().references(() => posts.id),
-  comment_id: uuid().references(() => comments.id),
+  post_id:    uuid().references(() => posts.id, { onDelete: "cascade" }),
+  comment_id: uuid().references(() => comments.id, { onDelete: "cascade" }),
   read_at:    timestamp({ withTimezone: true }),
   created_at: timestamp({ withTimezone: true }).notNull().defaultNow(),
 });

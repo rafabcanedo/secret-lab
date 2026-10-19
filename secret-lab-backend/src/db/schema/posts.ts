@@ -3,7 +3,7 @@ import { users } from "./users.js";
 import { communities } from "./communities.js";
 import { tags } from "./tags.js";
 
-export const postStatusEnum = pgEnum("post_status", ["DRAFT", "PUBLISHED", "ARCHIVED"]);
+export const postStatusEnum = pgEnum("post_status", ["DRAFT", "PUBLISHED"]);
 
 export const posts = pgTable("posts", {
   id:              uuid().primaryKey().defaultRandom(),
@@ -20,6 +20,6 @@ export const posts = pgTable("posts", {
 });
 
 export const postTags = pgTable("post_tags", {
-  post_id: uuid().notNull().references(() => posts.id),
+  post_id: uuid().notNull().references(() => posts.id, { onDelete: "cascade" }),
   tag_id:  uuid().notNull().references(() => tags.id),
 }, (t) => [primaryKey({ columns: [t.post_id, t.tag_id] })]);
