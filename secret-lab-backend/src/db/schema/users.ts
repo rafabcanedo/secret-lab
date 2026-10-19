@@ -10,7 +10,7 @@ export const users = pgTable("users", {
   id:            uuid().primaryKey().defaultRandom(),
   name:          varchar({ length: 100 }).notNull(),
   crm:           varchar({ length: 12 }).notNull().unique(),
-  slug:          varchar({ length: 100 }).notNull().unique(),
+  uf:            varchar({ length: 2 }).notNull(),
   specialty:     userSpecialtyEnum().notNull(),
   email:         varchar({ length: 255 }).notNull().unique(),
   password_hash: varchar({ length: 255 }).notNull(),

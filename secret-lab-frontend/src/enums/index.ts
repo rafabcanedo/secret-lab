@@ -4,6 +4,17 @@ export enum Speciality {
   DERMATOLOGIA = "DERMATOLOGIA",
 }
 
+export enum PostStatus {
+  DRAFT = "DRAFT",
+  PUBLISHED = "PUBLISHED",
+}
+
+export enum NotificationType {
+  LIKE = "LIKE",
+  COMMENT = "COMMENT",
+  REPLY = "REPLY",
+}
+
 export enum UF {
   AC = "AC",
   AL = "AL",
