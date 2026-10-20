@@ -157,6 +157,44 @@ export const postRepository = {
     }
   },
 
+  async findPublicByIds(ids: string[]): Promise<PostFeedItem[]> {
+    const likesCountSq = buildLikesSubquery()
+
+    const rows = await db
+      .select({
+        id:              posts.id,
+        community_id:    posts.community_id,
+        author_id:       posts.author_id,
+        slug:            posts.slug,
+        title:           posts.title,
+        cover_image_url: posts.cover_image_url,
+        status:          posts.status,
+        published_at:    posts.published_at,
+        created_at:      posts.created_at,
+        updated_at:      posts.updated_at,
+        author_name:     users.name,
+        community_name:  communities.name,
+        community_slug:  communities.slug,
+        likes_count:     sql<number>`coalesce(${likesCountSq.count}, 0)`,
+      })
+      .from(posts)
+      .innerJoin(users, eq(posts.author_id, users.id))
+      .innerJoin(communities, eq(posts.community_id, communities.id))
+      .leftJoin(likesCountSq, eq(posts.id, likesCountSq.post_id))
+      .where(inArray(posts.id, ids))
+
+    if (rows.length === 0) return []
+
+    const tagMap = await attachTags(rows.map(r => r.id))
+
+    return rows.map(r => ({
+      ...r,
+      author:    { id: r.author_id, name: r.author_name },
+      community: { id: r.community_id, name: r.community_name, slug: r.community_slug },
+      tags:      tagMap.get(r.id) ?? [],
+    }))
+  },
+
   async findFeed(filters: FeedFilters, sort: FeedSort, pagination: Pagination): Promise<PostFeedItem[]> {
     const likesCountSq = buildLikesSubquery()
     const offset = (pagination.page - 1) * pagination.limit

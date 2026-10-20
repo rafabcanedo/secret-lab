@@ -9,6 +9,8 @@ import { healthRoutes } from "./routes/health.js";
 import { userRoutes } from "./routes/users.js";
 import { communityRoutes } from "./routes/communities.js";
 import { postRoutes } from "./routes/posts.js";
+import { likeRoutes } from "./routes/likes.js";
+import { bookmarkRoutes } from "./routes/bookmarks.js";
 
 export const app = Fastify({ logger: true });
 
@@ -37,3 +39,5 @@ app.register(healthRoutes);
 app.register(userRoutes);
 app.register(communityRoutes);
 app.register(postRoutes);
+app.register(likeRoutes);
+app.register(bookmarkRoutes);
