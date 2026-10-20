@@ -11,21 +11,52 @@ export type User = {
   updatedAt: string
 }
 
-export type Post = {
+export type PostAuthor = {
+  id: string
+  name: string
+}
+
+export type PostCommunityRef = {
+  id: string
+  name: string
+  slug: string
+}
+
+export type PostTag = {
+  id: string
+  name: string
+  slug: string
+}
+
+export type PostCategory = {
+  id: string
+  name: string
+  slug: string
+}
+
+export type PostFeedItem = {
   id: string
   communityId: string
   authorId: string
-  slug: string | null
+  slug: string
   title: string
   coverImageUrl: string | null
-  content: string
+  excerpt: string | null
   status: PostStatus
   publishedAt: string | null
   createdAt: string
   updatedAt: string
+  author: PostAuthor
+  community: PostCommunityRef
+  tags: PostTag[]
+  likesCount: number
 }
 
-export type Community = {
+export type PostPublic = PostFeedItem & {
+  content: string
+}
+
+export type CommunityPublic = {
   id: string
   creatorId: string
   name: string
@@ -33,6 +64,8 @@ export type Community = {
   description: string | null
   createdAt: string
   updatedAt: string
+  memberCount: number
+  categories: PostCategory[]
 }
 
 export type Tag = {
