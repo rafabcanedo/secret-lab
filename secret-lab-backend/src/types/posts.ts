@@ -36,7 +36,7 @@ type PostBase = {
   likes_count: number
 }
 
-export type PostFeedItem = PostBase
+export type PostFeedItem = PostBase & { excerpt: string | null }
 
 export type PostPublic = PostBase & { content: string }
 

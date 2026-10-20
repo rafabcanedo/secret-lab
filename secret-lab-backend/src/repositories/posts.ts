@@ -6,6 +6,7 @@ import { communities } from "../db/schema/communities.js"
 import { tags } from "../db/schema/tags.js"
 import { likes } from "../db/schema/likes.js"
 import type { PostRecord, PostPublic, PostFeedItem, TagPublic, FeedFilters, FeedSort, Pagination } from "../types/posts.js"
+import { generateExcerpt } from "../shared/utils/excerpt.js"
 
 function buildLikesSubquery() {
   return db
@@ -168,6 +169,7 @@ export const postRepository = {
         slug:            posts.slug,
         title:           posts.title,
         cover_image_url: posts.cover_image_url,
+        content:         posts.content,
         status:          posts.status,
         published_at:    posts.published_at,
         created_at:      posts.created_at,
@@ -189,6 +191,7 @@ export const postRepository = {
 
     return rows.map(r => ({
       ...r,
+      excerpt:   generateExcerpt(r.content),
       author:    { id: r.author_id, name: r.author_name },
       community: { id: r.community_id, name: r.community_name, slug: r.community_slug },
       tags:      tagMap.get(r.id) ?? [],
@@ -211,6 +214,7 @@ export const postRepository = {
         slug:            posts.slug,
         title:           posts.title,
         cover_image_url: posts.cover_image_url,
+        content:         posts.content,
         status:          posts.status,
         published_at:    posts.published_at,
         created_at:      posts.created_at,
@@ -239,6 +243,7 @@ export const postRepository = {
 
     return rows.map(r => ({
       ...r,
+      excerpt:   generateExcerpt(r.content),
       author:    { id: r.author_id, name: r.author_name },
       community: { id: r.community_id, name: r.community_name, slug: r.community_slug },
       tags:      tagMap.get(r.id) ?? [],
