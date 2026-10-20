@@ -10,6 +10,8 @@ const PROTECTED_ROUTES = [
 ]
 
 export function proxy(request: NextRequest) {
+  if (process.env.NODE_ENV === "development") return NextResponse.next()
+
   const token = request.cookies.get("access_token")
   const isProtected = PROTECTED_ROUTES.some((route) =>
     request.nextUrl.pathname.startsWith(route)

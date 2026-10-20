@@ -1,0 +1,38 @@
+import type { PostFeedItem } from "@/types"
+
+export const mockPosts: PostFeedItem[] = [
+  {
+    id: "p1",
+    communityId: "1",
+    authorId: "u1",
+    slug: "novo-avanco-em-stents-coronarios",
+    title: "Novo avanço em stents coronários",
+    coverImageUrl: null,
+    excerpt: "Pesquisadores publicaram resultados promissores sobre stents bioabsorvíveis.",
+    status: "PUBLISHED",
+    publishedAt: "2024-06-01T00:00:00Z",
+    createdAt: "2024-06-01T00:00:00Z",
+    updatedAt: "2024-06-01T00:00:00Z",
+    author: { id: "u1", name: "Dr. João Silva" },
+    community: { id: "1", name: "Cardiologia", slug: "cardiologia" },
+    tags: [{ id: "t1", name: "stents", slug: "stents" }],
+    likesCount: 34,
+  },
+  {
+    id: "p2",
+    communityId: "1",
+    authorId: "u2",
+    slug: "fibrilacao-atrial-novos-guidelines",
+    title: "Fibrilação atrial: novos guidelines",
+    coverImageUrl: null,
+    excerpt: "A atualização dos guidelines traz mudanças relevantes para o manejo clínico.",
+    status: "PUBLISHED",
+    publishedAt: "2024-06-02T00:00:00Z",
+    createdAt: "2024-06-02T00:00:00Z",
+    updatedAt: "2024-06-02T00:00:00Z",
+    author: { id: "u2", name: "Dra. Ana Lima" },
+    community: { id: "1", name: "Cardiologia", slug: "cardiologia" },
+    tags: [{ id: "t2", name: "guidelines", slug: "guidelines" }],
+    likesCount: 21,
+  },
+]
