@@ -3,6 +3,7 @@ import Image from "next/image"
 import Link from "next/link"
 import logo from "@/assets/logo-secret-lab.png"
 import { Button } from "@/components/ui/button"
+import { AuthModal } from "@/components/auth-modal"
 import { Notification } from "./components/notification"
 import { UserMenu } from "./components/user-menu"
 
@@ -39,9 +40,7 @@ export default async function Navbar() {
               <UserMenu initials="SL" />
             </>
           ) : (
-            <Button size="lg">
-              Sign In
-            </Button>
+            <AuthModal />
           )}
         </div>
       </div>
