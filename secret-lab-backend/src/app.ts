@@ -11,6 +11,9 @@ import { communityRoutes } from "./routes/communities.js";
 import { postRoutes } from "./routes/posts.js";
 import { likeRoutes } from "./routes/likes.js";
 import { bookmarkRoutes } from "./routes/bookmarks.js";
+import { categoryRoutes } from "./routes/categories.js";
+import { tagRoutes } from "./routes/tags.js";
+import { commentRoutes } from "./routes/comments.js";
 
 export const app = Fastify({ logger: true });
 
@@ -41,3 +44,6 @@ app.register(communityRoutes);
 app.register(postRoutes);
 app.register(likeRoutes);
 app.register(bookmarkRoutes);
+app.register(categoryRoutes);
+app.register(tagRoutes);
+app.register(commentRoutes);

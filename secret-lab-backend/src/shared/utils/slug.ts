@@ -1,6 +1,6 @@
 import { randomBytes } from "crypto"
 
-function toKebabCase(text: string): string {
+export function toKebabCase(text: string): string {
   return text
     .toLowerCase()
     .normalize("NFD")
