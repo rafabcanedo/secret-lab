@@ -2,17 +2,13 @@ import type { FastifyRequest, FastifyReply } from "fastify"
 import { communityService } from "../services/communities.js"
 import type { CreateCommunityInput } from "../validations/communities.js"
 
-type CreateBody = CreateCommunityInput & { user_id: string }
-type UserBody   = { user_id: string }
-
 export const communityController = {
   async create(
-    _request: FastifyRequest,
+    request: FastifyRequest,
     reply: FastifyReply,
-    body: CreateBody
+    body: CreateCommunityInput
   ): Promise<void> {
-    const { user_id, ...data } = body
-    const community = await communityService.create(data, user_id)
+    const community = await communityService.create(body, request.user.sub)
     reply.status(201).send(community)
   },
 
@@ -34,19 +30,17 @@ export const communityController = {
 
   async join(
     request: FastifyRequest<{ Params: { id: string } }>,
-    reply: FastifyReply,
-    body: UserBody
+    reply: FastifyReply
   ): Promise<void> {
-    await communityService.join(request.params.id, body.user_id)
+    await communityService.join(request.params.id, request.user.sub)
     reply.status(204).send()
   },
 
   async leave(
     request: FastifyRequest<{ Params: { id: string } }>,
-    reply: FastifyReply,
-    body: UserBody
+    reply: FastifyReply
   ): Promise<void> {
-    await communityService.leave(request.params.id, body.user_id)
+    await communityService.leave(request.params.id, request.user.sub)
     reply.status(204).send()
   },
 }

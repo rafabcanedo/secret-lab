@@ -1,6 +1,7 @@
 import { AppError } from "../shared/errors/AppError.js"
 import { commentRepository } from "../repositories/comments.js"
 import { postRepository } from "../repositories/posts.js"
+import { notificationService } from "./notifications.js"
 import type { CommentPublic, CommentRecord } from "../types/comments.js"
 import type { CreateCommentInput, UpdateCommentInput } from "../validations/comments.js"
 
@@ -10,19 +11,28 @@ export const commentService = {
     if (!post) throw new AppError("Post not found", 404)
     if (post.status !== "PUBLISHED") throw new AppError("Post is not published", 400)
 
+    let parent = null
     if (data.parent_id) {
-      const parent = await commentRepository.findById(data.parent_id)
+      parent = await commentRepository.findById(data.parent_id)
       if (!parent) throw new AppError("Parent comment not found", 404)
       if (parent.post_id !== postId) throw new AppError("Parent comment does not belong to this post", 400)
       if (parent.parent_id !== null) throw new AppError("Replies to replies are not allowed", 400)
     }
 
-    return commentRepository.create({
+    const comment = await commentRepository.create({
       post_id:   postId,
       author_id: userId,
       parent_id: data.parent_id ?? null,
       content:   data.content,
     })
+
+    if (parent) {
+      await notificationService.create({ user_id: parent.author_id, actor_id: userId, type: "REPLY", post_id: postId, comment_id: comment.id })
+    } else {
+      await notificationService.create({ user_id: post.author_id, actor_id: userId, type: "COMMENT", post_id: postId, comment_id: comment.id })
+    }
+
+    return comment
   },
 
   async edit(commentId: string, userId: string, data: UpdateCommentInput): Promise<CommentRecord> {

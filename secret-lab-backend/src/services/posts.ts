@@ -2,6 +2,7 @@ import { AppError } from "../shared/errors/AppError.js"
 import { generateSlug } from "../shared/utils/slug.js"
 import { postRepository } from "../repositories/posts.js"
 import { communityRepository } from "../repositories/communities.js"
+import { tagRepository } from "../repositories/tags.js"
 import type { CreatePostInput, UpdatePostInput, FeedQueryInput } from "../validations/posts.js"
 import type { PostPublic, PostFeedItem } from "../types/posts.js"
 
@@ -22,6 +23,8 @@ export const postService = {
     })
 
     if (data.tag_ids && data.tag_ids.length > 0) {
+      const found = await tagRepository.findAllByIds(data.tag_ids)
+      if (found.length !== data.tag_ids.length) throw new AppError("One or more tags not found", 400)
       await postRepository.setTags(post.id, data.tag_ids)
     }
 
@@ -41,6 +44,10 @@ export const postService = {
     await postRepository.update(id, fields)
 
     if (tag_ids !== undefined) {
+      if (tag_ids.length > 0) {
+        const found = await tagRepository.findAllByIds(tag_ids)
+        if (found.length !== tag_ids.length) throw new AppError("One or more tags not found", 400)
+      }
       await postRepository.setTags(id, tag_ids)
     }
 

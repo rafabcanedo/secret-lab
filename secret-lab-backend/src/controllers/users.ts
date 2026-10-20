@@ -21,19 +21,19 @@ export const userController = {
   },
 
   async updateProfile(
-    request: FastifyRequest<{ Params: { id: string } }>,
+    request: FastifyRequest,
     reply: FastifyReply,
     body: UpdateUserInput
   ): Promise<void> {
-    const user = await userService.updateProfile(request.params.id, body)
+    const user = await userService.updateProfile(request.user.sub, body)
     reply.send(user)
   },
 
   async deleteAccount(
-    request: FastifyRequest<{ Params: { id: string } }>,
+    request: FastifyRequest,
     reply: FastifyReply
   ): Promise<void> {
-    await userService.deleteAccount(request.params.id)
+    await userService.deleteAccount(request.user.sub)
     reply.status(204).send()
   },
 }

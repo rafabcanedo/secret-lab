@@ -5,6 +5,7 @@ import jwt from "@fastify/jwt";
 import { ValidationError } from "yup";
 import { env } from "./config/env.js";
 import { AppError } from "./shared/errors/AppError.js";
+import { authRoutes } from "./routes/auth.js";
 import { healthRoutes } from "./routes/health.js";
 import { userRoutes } from "./routes/users.js";
 import { communityRoutes } from "./routes/communities.js";
@@ -14,6 +15,8 @@ import { bookmarkRoutes } from "./routes/bookmarks.js";
 import { categoryRoutes } from "./routes/categories.js";
 import { tagRoutes } from "./routes/tags.js";
 import { commentRoutes } from "./routes/comments.js";
+import { notificationRoutes } from "./routes/notifications.js";
+import { uploadRoutes } from "./routes/upload.js";
 
 export const app = Fastify({ logger: true });
 
@@ -38,6 +41,7 @@ app.setErrorHandler<Error>((error, _request, reply) => {
   return reply.status(500).send({ message: "Internal server error" });
 });
 
+app.register(authRoutes);
 app.register(healthRoutes);
 app.register(userRoutes);
 app.register(communityRoutes);
@@ -47,3 +51,5 @@ app.register(bookmarkRoutes);
 app.register(categoryRoutes);
 app.register(tagRoutes);
 app.register(commentRoutes);
+app.register(notificationRoutes);
+app.register(uploadRoutes);

@@ -1,6 +1,7 @@
 import { AppError } from "../shared/errors/AppError.js"
 import { generateSlug } from "../shared/utils/slug.js"
 import { communityRepository } from "../repositories/communities.js"
+import { categoryRepository } from "../repositories/categories.js"
 import type { CreateCommunityInput } from "../validations/communities.js"
 import type { CommunityPublic } from "../types/communities.js"
 
@@ -19,6 +20,8 @@ export const communityService = {
     })
 
     if (data.category_ids && data.category_ids.length > 0) {
+      const found = await categoryRepository.findAllByIds(data.category_ids)
+      if (found.length !== data.category_ids.length) throw new AppError("One or more categories not found", 400)
       await communityRepository.addCategories(community.id, data.category_ids)
     }
 

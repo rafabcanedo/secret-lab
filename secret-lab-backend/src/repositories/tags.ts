@@ -1,4 +1,4 @@
-import { eq } from "drizzle-orm"
+import { eq, inArray } from "drizzle-orm"
 import { db } from "../db/index.js"
 import { tags } from "../db/schema/tags.js"
 import type { TagRecord } from "../types/tags.js"
@@ -17,5 +17,9 @@ export const tagRepository = {
 
   async findAll(): Promise<TagRecord[]> {
     return db.select().from(tags).orderBy(tags.name)
+  },
+
+  async findAllByIds(ids: string[]): Promise<TagRecord[]> {
+    return db.select().from(tags).where(inArray(tags.id, ids))
   },
 }

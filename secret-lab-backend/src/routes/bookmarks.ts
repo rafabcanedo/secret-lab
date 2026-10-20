@@ -1,21 +1,17 @@
-import * as yup from "yup"
 import type { FastifyInstance } from "fastify"
+import { authenticate } from "../shared/middlewares/auth.js"
 import { bookmarkController } from "../controllers/bookmarks.js"
 
-const userIdSchema = yup.object({ user_id: yup.string().uuid().required() })
-
 export async function bookmarkRoutes(app: FastifyInstance) {
-  app.post<{ Params: { id: string } }>("/posts/:id/bookmark", async (request, reply) => {
-    const body = await userIdSchema.validate(request.body, { abortEarly: false, stripUnknown: true })
-    return bookmarkController.save(request, reply, body)
+  app.post<{ Params: { id: string } }>("/posts/:id/bookmark", { preHandler: authenticate }, async (request, reply) => {
+    return bookmarkController.save(request, reply)
   })
 
-  app.delete<{ Params: { id: string } }>("/posts/:id/bookmark", async (request, reply) => {
-    const body = await userIdSchema.validate(request.body, { abortEarly: false, stripUnknown: true })
-    return bookmarkController.unsave(request, reply, body)
+  app.delete<{ Params: { id: string } }>("/posts/:id/bookmark", { preHandler: authenticate }, async (request, reply) => {
+    return bookmarkController.unsave(request, reply)
   })
 
-  app.get<{ Params: { id: string } }>("/users/:id/bookmarks", async (request, reply) => {
+  app.get("/users/me/bookmarks", { preHandler: authenticate }, async (request, reply) => {
     return bookmarkController.listByUser(request, reply)
   })
 }

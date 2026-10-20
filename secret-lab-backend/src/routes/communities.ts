@@ -1,14 +1,11 @@
-import * as yup from "yup"
 import type { FastifyInstance } from "fastify"
+import { authenticate } from "../shared/middlewares/auth.js"
 import { communityController } from "../controllers/communities.js"
 import { createCommunitySchema } from "../validations/communities.js"
 
-const userIdSchema  = yup.object({ user_id: yup.string().uuid().required() })
-const createSchema  = createCommunitySchema.concat(userIdSchema)
-
 export async function communityRoutes(app: FastifyInstance) {
-  app.post("/communities", async (request, reply) => {
-    const body = await createSchema.validate(request.body, { abortEarly: false, stripUnknown: true })
+  app.post("/communities", { preHandler: authenticate }, async (request, reply) => {
+    const body = await createCommunitySchema.validate(request.body, { abortEarly: false, stripUnknown: true })
     return communityController.create(request, reply, body)
   })
 
@@ -20,13 +17,11 @@ export async function communityRoutes(app: FastifyInstance) {
     return communityController.getBySlug(request, reply)
   })
 
-  app.post<{ Params: { id: string } }>("/communities/:id/join", async (request, reply) => {
-    const body = await userIdSchema.validate(request.body, { abortEarly: false, stripUnknown: true })
-    return communityController.join(request, reply, body)
+  app.post<{ Params: { id: string } }>("/communities/:id/join", { preHandler: authenticate }, async (request, reply) => {
+    return communityController.join(request, reply)
   })
 
-  app.delete<{ Params: { id: string } }>("/communities/:id/leave", async (request, reply) => {
-    const body = await userIdSchema.validate(request.body, { abortEarly: false, stripUnknown: true })
-    return communityController.leave(request, reply, body)
+  app.delete<{ Params: { id: string } }>("/communities/:id/leave", { preHandler: authenticate }, async (request, reply) => {
+    return communityController.leave(request, reply)
   })
 }
